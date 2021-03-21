@@ -1,0 +1,23 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: homebridge-webservice
+  namespace : homebridge
+spec:
+  selector:
+    app: homebridge
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8581
+    name : web
+  - protocol: TCP
+    port: 5353
+    targetPort: 5353
+    name : bonjour
+  - protocol: TCP
+    port: 51139
+    targetPort: 51139
+    name : homebridge
+  type: LoadBalancer
+  loadBalancerIP: 192.168.87.22

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: homebridge-deployment
+  namespace: homebridge
+  labels:
+    app: homebridge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: homebridge
+  template:
+    metadata:
+      labels:
+        app: homebridge
+    spec:
+      hostNetwork: true
+      containers:
+      - name: homebridge
+        image: oznu/homebridge
+        env:
+        - name: HOMEBRIDGE_INSECURE
+          value: "1"
+        ports:
+        - name: web
+          containerPort: 8581
+        - name: homebridge
+          containerPort: 51139
+          protocol: TCP
+        - name: bonjour
+          containerPort: 5353
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /homebridge
+          name: hbdata
+      volumes:
+      - name: hbdata
+        hostPath:
+          path: /containers/homebridge
